@@ -41,3 +41,16 @@ knitr::kable(tribble(
 #    "Ubuntu",
 #    "OpenSUSE")
 
+## ---- eval = FALSE-------------------------------------------------------
+#  data.frame(
+#             X = c("Partly cloudy.", "Partly cloudy.", "Possible shower.",
+#                   "Partly cloudy.", "Shower or two. Possible storm.",
+#                   "Possible shower.", "Partly cloudy.", "Mostly sunny.", "Partly cloudy.",
+#                   "Possible shower.", "Partly cloudy."),
+#      Location = c("Brisbane", "Brisbane Airport", "Beaudesert", "Chermside",
+#                   "Gatton", "Ipswich", "Logan Central", "Manly",
+#                   "Mount Gravatt", "Oxley", "Redcliffe"),
+#           Min = c(19, 18, 15, 17, 15, 15, 18, 20, 17, 17, 19),
+#           Max = c(29, 27, 30, 29, 32, 30, 29, 26, 28, 30, 27)
+#  )
+

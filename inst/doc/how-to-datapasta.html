@@ -12,7 +12,7 @@
 
 <meta name="author" content="Miles McBain" />
 
-<meta name="date" content="2016-11-29" />
+<meta name="date" content="2017-01-09" />
 
 <title>How to Datapasta</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">How to Datapasta</h1>
 <h4 class="author"><em>Miles McBain</em></h4>
-<h4 class="date"><em>2016-11-29</em></h4>
+<h4 class="date"><em>2017-01-09</em></h4>
 
 
 
@@ -85,7 +85,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The addins and their behaviour are now described.</p>
 <div id="pasting-a-table-as-a-formatted-tibble-definition-with-tribble_paste" class="section level2">
 <h2>Pasting a table as a formatted tibble definition with <code>tribble_paste()</code></h2>
-<p>You can copy this:</p>
+<p>You can copy this html table of Brisbane weather forecasts:</p>
 <table>
 <thead>
 <tr class="header">
@@ -198,7 +198,7 @@ OpenSUSE</code></pre>
 <p>to</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="st">&quot;Mint&quot;</span>, <span class="st">&quot;Fedora&quot;</span>, <span class="st">&quot;Debian&quot;</span>, <span class="st">&quot;Ubuntu&quot;</span>, <span class="st">&quot;OpenSUSE&quot;</span>)</code></pre></div>
 <p>This is pasted into the souce editor at the current cursor.</p>
-<p>Just like <code>tribble_patset()</code>, <code>vector_paste()</code> has a flexible parser that can guess the type and separator of the data. The supported separators are <code>\|</code> (pipe), <code>\t</code> (tab), <code>,</code> (comma), <code>;</code>(semicolon) and end of line. The recommended keyboard shortcut is <code>crtl + alt + shift + v</code>.</p>
+<p>Just like <code>tribble_paste()</code>, <code>vector_paste()</code> has a flexible parser that can guess the type and separator of the data. The supported separators are <code>\|</code> (pipe), <code>\t</code> (tab), <code>,</code> (comma), <code>;</code>(semicolon) and end of line. The recommended keyboard shortcut is <code>crtl + alt + shift + v</code>.</p>
 </div>
 <div id="pasting-a-list-as-a-vertical-vector-with-vector_paste_vertical" class="section level2">
 <h2>Pasting a list as a vertical vector with <code>vector_paste_vertical()</code></h2>
@@ -209,6 +209,23 @@ OpenSUSE</code></pre>
   <span class="st">&quot;Ubuntu&quot;</span>,
   <span class="st">&quot;OpenSUSE&quot;</span>)</code></pre></div>
 <p>This is much nicer for long lists. I have found this is actually the version I use more often. I recommend using <code>ctrl + shift + v</code> as keyboard shortcut.</p>
+</div>
+<div id="pasting-as-a-data.frame-with-df_paste" class="section level2">
+<h2>Pasting as a data.frame with <code>df_paste()</code></h2>
+<p>The parser here is identical to <code>tribble_paste()</code> and has all the same type and separator guessing goodness. The difference is the output will be a formatted call to <code>base::data.frame()</code>. Some sensible line wrapping rules etc are implemented. Useful for purists and educators alike. Special thanks to Jonothan Carroll for contributing this feature.</p>
+<p>So the Brisbane weather table from above becomes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(
+           <span class="dt">X =</span> <span class="kw">c</span>(<span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Possible shower.&quot;</span>,
+                 <span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Shower or two. Possible storm.&quot;</span>,
+                 <span class="st">&quot;Possible shower.&quot;</span>, <span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Mostly sunny.&quot;</span>, <span class="st">&quot;Partly cloudy.&quot;</span>,
+                 <span class="st">&quot;Possible shower.&quot;</span>, <span class="st">&quot;Partly cloudy.&quot;</span>),
+    <span class="dt">Location =</span> <span class="kw">c</span>(<span class="st">&quot;Brisbane&quot;</span>, <span class="st">&quot;Brisbane Airport&quot;</span>, <span class="st">&quot;Beaudesert&quot;</span>, <span class="st">&quot;Chermside&quot;</span>,
+                 <span class="st">&quot;Gatton&quot;</span>, <span class="st">&quot;Ipswich&quot;</span>, <span class="st">&quot;Logan Central&quot;</span>, <span class="st">&quot;Manly&quot;</span>,
+                 <span class="st">&quot;Mount Gravatt&quot;</span>, <span class="st">&quot;Oxley&quot;</span>, <span class="st">&quot;Redcliffe&quot;</span>),
+         <span class="dt">Min =</span> <span class="kw">c</span>(<span class="dv">19</span>, <span class="dv">18</span>, <span class="dv">15</span>, <span class="dv">17</span>, <span class="dv">15</span>, <span class="dv">15</span>, <span class="dv">18</span>, <span class="dv">20</span>, <span class="dv">17</span>, <span class="dv">17</span>, <span class="dv">19</span>),
+         <span class="dt">Max =</span> <span class="kw">c</span>(<span class="dv">29</span>, <span class="dv">27</span>, <span class="dv">30</span>, <span class="dv">29</span>, <span class="dv">32</span>, <span class="dv">30</span>, <span class="dv">29</span>, <span class="dv">26</span>, <span class="dv">28</span>, <span class="dv">30</span>, <span class="dv">27</span>)
+)</code></pre></div>
+<p>For a shortcut you could try <code>ctrl + shift + d</code>.</p>
 </div>
 
 

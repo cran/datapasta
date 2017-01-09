@@ -21,7 +21,7 @@ Places I've found this power useful:
 The addins and their behaviour are now described.
 
 ## Pasting a table as a formatted tibble definition with `tribble_paste()`
-You can copy this:
+You can copy this html table of Brisbane weather forecasts:
 
 ```{r, echo=FALSE}
 library(tibble)
@@ -64,7 +64,7 @@ tribble(
 
 To paste data as a `tribble()` call, just copy the table header and data rows, then paste into the source editor using the addin `Paste as tribble`. For best results, assign the addin to a memorable keyboard shortcut, e.g. `ctrl + shift + t`. See [Customizing Keyboard Shortcuts ](https://support.rstudio.com/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts).
 
-`tribble_paste()` is a flexible function that guesses the separator and types of the data it pulls from the clipboard. Mostly this seems to work well. Ocassionally it epic-fails. The supported separators are `\|` (pipe), `\t` (tab), `,` (comma), `;`(semicolon). Most data copied from the internet or spreadsheets will be tab delimited.   
+`tribble_paste()` is a flexible function that guesses the separator and types of the data it pulls from the clipboard. Mostly this seems to work well. Ocassionally it epic-fails. The supported separators are `\|` (pipe), `\t` (tab), `,` (comma), `;`(semicolon). Most data copied from the internet or spreadsheets will be tab delimited.
 
 ##Pasting a list as a horizontal vector with `vector_paste()`
 A list could be a row or column of a spreadsheet or intermediate output. With the `Paste as vector` addin you can go from something like:
@@ -92,7 +92,7 @@ c("Mint", "Fedora", "Debian", "Ubuntu", "OpenSUSE")
 
 This is pasted into the souce editor at the current cursor.
 
-Just like `tribble_patset()`, `vector_paste()` has a flexible parser that can guess the type and separator of the data. The supported separators are `\|` (pipe), `\t` (tab), `,` (comma), `;`(semicolon) and end of line. The recommended keyboard shortcut is `crtl + alt + shift + v`.
+Just like `tribble_paste()`, `vector_paste()` has a flexible parser that can guess the type and separator of the data. The supported separators are `\|` (pipe), `\t` (tab), `,` (comma), `;`(semicolon) and end of line. The recommended keyboard shortcut is `crtl + alt + shift + v`.
 
 ##Pasting a list as a vertical vector with `vector_paste_vertical()`
 Given the same types of list inputs as above, the `Paste as vector (vertical)` addin pastes the output with each element on its own line, e.g.:
@@ -107,3 +107,22 @@ c("Mint",
 
 This is much nicer for long lists. I have found this is actually the version I use more often. I recommend using `ctrl + shift + v` as keyboard shortcut.
 
+##Pasting as a data.frame with `df_paste()`
+The parser here is identical to `tribble_paste()` and has all the same type and separator guessing goodness. The difference is the output will be a formatted call to `base::data.frame()`. Some sensible line wrapping rules etc are implemented. Useful for purists and educators alike. Special thanks to Jonothan Carroll for contributing this feature.
+
+So the Brisbane weather table from above becomes:
+```{r, eval = FALSE}
+data.frame(
+           X = c("Partly cloudy.", "Partly cloudy.", "Possible shower.",
+                 "Partly cloudy.", "Shower or two. Possible storm.",
+                 "Possible shower.", "Partly cloudy.", "Mostly sunny.", "Partly cloudy.",
+                 "Possible shower.", "Partly cloudy."),
+    Location = c("Brisbane", "Brisbane Airport", "Beaudesert", "Chermside",
+                 "Gatton", "Ipswich", "Logan Central", "Manly",
+                 "Mount Gravatt", "Oxley", "Redcliffe"),
+         Min = c(19, 18, 15, 17, 15, 15, 18, 20, 17, 17, 19),
+         Max = c(29, 27, 30, 29, 32, 30, 29, 26, 28, 30, 27)
+)
+```
+
+For a shortcut you could try `ctrl + shift + d`.
