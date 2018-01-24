@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -12,7 +12,7 @@
 
 <meta name="author" content="Miles McBain" />
 
-<meta name="date" content="2017-03-27" />
+<meta name="date" content="2018-01-25" />
 
 <title>How to Datapasta</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">How to Datapasta</h1>
 <h4 class="author"><em>Miles McBain</em></h4>
-<h4 class="date"><em>2017-03-27</em></h4>
+<h4 class="date"><em>2018-01-25</em></h4>
 
 
 
@@ -81,6 +81,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Embedding small-ish amounts of raw data from .csv into Rmarkdown files. The file thus contains code documentation and data, attaining the holy trinity of reproducibility.</li>
 <li>Quickly pasting vector output from other queries into <code>dplyr::filter( .. %in% ..)</code>.</li>
 <li>Adding datasets to readily reproducible examples for posting to StackOverflow, Slack channels etc.</li>
+<li>Creating <code>c()</code> expressions with a LOT less typing and fiddling.</li>
 </ul>
 <p>Typical usage takes full advantage of addins within RStudio, however <code>datapasta</code> can be used with any R editor, even just the terminal. The typical RStudio case is described in full detail below, followed by the fallback behaviour.</p>
 <div id="typical-usage-with-rstudio" class="section level1">
@@ -167,8 +168,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </tbody>
 </table>
 <p>And make this appear at the current cursor:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble::<span class="kw">tribble</span>(
-                                  ~X,          ~Location, ~Min, ~Max,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble<span class="op">::</span><span class="kw">tribble</span>(
+                                  <span class="op">~</span>X,          <span class="op">~</span>Location, <span class="op">~</span>Min, <span class="op">~</span>Max,
                     <span class="st">&quot;Partly cloudy.&quot;</span>,         <span class="st">&quot;Brisbane&quot;</span>,   19L,   29L,
                     <span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Brisbane Airport&quot;</span>,   18L,   27L,
                   <span class="st">&quot;Possible shower.&quot;</span>,       <span class="st">&quot;Beaudesert&quot;</span>,   15L,   30L,
@@ -183,7 +184,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     )</code></pre></div>
 <p><code>tibble::tribble()</code> or ‘<strong>transposed</strong> tibble’ is a really neat function that allows a <code>tibble</code> to be written in human readable format (Thanks be to Hadley).</p>
 <p>To paste data as a <code>tribble()</code> call, just copy the table header and data rows, then paste into the source editor using the addin <code>Paste as tribble</code>. For best results, assign the addin to a memorable keyboard shortcut, e.g. <code>ctrl + shift + t</code>. See <a href="https://support.rstudio.com/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts">Customizing Keyboard Shortcuts</a>.</p>
-<p><code>tribble_paste()</code> is a flexible function that guesses the separator and types of the data it pulls from the clipboard. Mostly this seems to work well. Occasionally it epic-fails. The supported separators are <code>\|</code> (pipe), <code>\t</code> (tab), <code>,</code> (comma), <code>;</code>(semicolon). Most data copied from the internet or spreadsheets will be tab delimited.</p>
+<p><code>tribble_paste()</code> is a flexible function that guesses the separator and types of the data it pulls from the clipboard. Mostly this seems to work well. Occasionally it epic-fails. The supported separators are <code>\|</code> (pipe), <code>\t</code> (tab), <code>,</code> (comma), <code>;</code>(semicolon). Most data copied from the internet or spreadsheets will be tab delimited. It will also attempt to recognise a lack of a header row and create a default for you, although this is not always possible.</p>
 </div>
 <div id="pasting-a-list-as-a-horizontal-vector-with-vector_paste" class="section level2">
 <h2>Pasting a list as a horizontal vector with <code>vector_paste()</code></h2>
@@ -234,8 +235,8 @@ OpenSUSE</code></pre>
 <div id="output-to-r-with-dpasta" class="section level3">
 <h3>Output to R with <code>dpasta()</code></h3>
 <p>All of the above addin functions can be called directly with an R object argument. When run, this will result in the object being output at the current cursor. Usually the next line. To make things more magical, a there is a single function <code>dpasta</code> that will match the argument with the appropriate <code>_paste()</code> function based on its class. This means:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris %&gt;%
-<span class="st">  </span><span class="kw">head</span>() %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">head</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">dpasta</span>()</code></pre></div>
 <p>results in:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(
@@ -247,13 +248,13 @@ OpenSUSE</code></pre>
                                  <span class="st">&quot;setosa&quot;</span>))
    )</code></pre></div>
 <p>while:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg %&gt;%
-<span class="st">  </span><span class="kw">select</span>(-class) %&gt;%<span class="st">  </span><span class="co">#just to fit neatly on this page</span>
-<span class="st">  </span><span class="kw">head</span>() %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span><span class="st">  </span><span class="co">#just to fit neatly on this page</span>
+<span class="st">  </span><span class="kw">head</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">dpasta</span>()</code></pre></div>
 <p>will give you:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble::<span class="kw">tribble</span>(
-     ~manufacturer, ~model, ~displ, ~year, ~cyl,        ~trans, ~drv, ~cty, ~hwy,  ~fl,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble<span class="op">::</span><span class="kw">tribble</span>(
+     <span class="op">~</span>manufacturer, <span class="op">~</span>model, <span class="op">~</span>displ, <span class="op">~</span>year, <span class="op">~</span>cyl,        <span class="op">~</span>trans, <span class="op">~</span>drv, <span class="op">~</span>cty, <span class="op">~</span>hwy,  <span class="op">~</span>fl,
             <span class="st">&quot;audi&quot;</span>,   <span class="st">&quot;a4&quot;</span>,    <span class="fl">1.8</span>, 1999L,   4L,    <span class="st">&quot;auto(l5)&quot;</span>,  <span class="st">&quot;f&quot;</span>,  18L,  29L,  <span class="st">&quot;p&quot;</span>, 
             <span class="st">&quot;audi&quot;</span>,   <span class="st">&quot;a4&quot;</span>,    <span class="fl">1.8</span>, 1999L,   4L,  <span class="st">&quot;manual(m5)&quot;</span>,  <span class="st">&quot;f&quot;</span>,  21L,  29L,  <span class="st">&quot;p&quot;</span>,
             <span class="st">&quot;audi&quot;</span>,   <span class="st">&quot;a4&quot;</span>,      <span class="dv">2</span>, 2008L,   4L,  <span class="st">&quot;manual(m6)&quot;</span>,  <span class="st">&quot;f&quot;</span>,  20L,  31L,  <span class="st">&quot;p&quot;</span>,
@@ -263,12 +264,41 @@ OpenSUSE</code></pre>
      )</code></pre></div>
 </div>
 </div>
+<div id="avoiding-fiddly-data-formatting" class="section level2">
+<h2>Avoiding fiddly data formatting</h2>
+<p>There are two addins that operate on RStudio cursor selections to make your life easier:</p>
+<div id="fiddle-selections-unitl-theyre-better" class="section level3">
+<h3>Fiddle Selections unitl they’re better</h3>
+<p><code>Fiddle Selection</code> is intended to remove some fiddly tasks from your workflow. It can turn raw data like <code>1 2 3</code> into <code>c(1,2,3)</code>, then pivot from that to:</p>
+<pre><code>c(1,
+  2,
+  3)</code></pre>
+<p>and back again to <code>c(1,2,3)</code>. The parser here is really flexible too. It will accept data delimited by any combination of spaces, commas, and newlines.</p>
+<p><code>Fiddle Selection</code> Can also reflow messy <code>tribble()</code> and <code>data.frame()</code> expressions into neatly aligned ones, say after hand editing.</p>
+</div>
+<div id="toggle-quotes" class="section level3">
+<h3>Toggle Quotes</h3>
+<p><code>Toggle Vector Quotes</code> will convert a selected expression like <code>c(a,b,c)</code> to a quoted version i.e <code>c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;)</code>. If it’s already quoted it will convert the other way to a bare version. All elements will be quoted if there’s a mixture. It also works with vertically algined expressions.</p>
+<p>With the combination of these two you can get really lazy e.g. go from:</p>
+<pre><code>some stuff I typed
+
+#To
+
+c(&quot;some&quot;,
+  &quot;stuff&quot;,
+  &quot;I&quot;,
+  &quot;typed&quot;) # mostly
+</code></pre>
+<p>in a couple of keystrokes!</p>
+<p>Try assigning these addins to <code>ctrl + shift + f</code> and <code>ctrl + shift + q</code> respectively.</p>
+</div>
+</div>
 <div id="output-to-clipboard-with-dmdclip" class="section level2">
 <h2>Output to clipboard with <code>dmdclip()</code></h2>
 <p><code>dmdclip()</code> can help you take the data to somewhere that uses markdown format, for example a Stack Overflow question or Github issue. This function will copy the resulting formatted data object call to the clipboard, inserting 4 spaces at the head of each line, which is markdown syntax for a pre-formatted block.</p>
 <p>So:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris %&gt;%
-<span class="st">  </span><span class="kw">head</span>() %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">head</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">dmdclip</span>()</code></pre></div>
 <p>Will paste the following on the clipboard:</p>
 <pre><code>    data.frame(
@@ -294,7 +324,7 @@ OpenSUSE</code></pre>
 <p><code>trib_call</code> now contains a the tribble call as a character vector. You could then write this with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">write</span>(trib_call, <span class="dt">file =</span> ..your desired location..)
 <span class="co">#OR</span>
-clipr::<span class="kw">write_clip</span>(trib_call) <span class="co">#Send it back to the clipboard.</span></code></pre></div>
+clipr<span class="op">::</span><span class="kw">write_clip</span>(trib_call) <span class="co">#Send it back to the clipboard.</span></code></pre></div>
 </div>
 </div>
 <div id="configurable-options" class="section level1">
@@ -316,7 +346,7 @@ clipr::<span class="kw">write_clip</span>(trib_call) <span class="co">#Send it b
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

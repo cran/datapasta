@@ -1,24 +1,24 @@
 context("test data.frame paste")
 skip_msg <- "System clipboard is not available - skipping test."
 is_clipr_available <- clipr::clipr_available()
-is_rstudio_available <- rstudioapi::isAvailable()
+is_RStudio_session <- interactive() & rstudioapi::isAvailable()
 
 test_that("Test data.frame text wrapping works", {
   skip_if_not(is_clipr_available, skip_msg)
-  skip_if_not(is_rstudio_available)
   skip_on_cran()
+  skip_if_not(is_RStudio_session)
   expect_equal({
     clipr::write_clip(content = readr::read_lines(file = "./route_length.txt"))
     df_construct()
   },
-  {"data.frame(\n                Route = c(40010L, 40015L, 40020L, 40025L, 40030L, 40035L,\n                          40040L, 40045L, 40050L, 40055L, 40060L, 40065L,\n                          40070L, 40075L, 40080L, 40085L, 40090L, 40092L, 40095L,\n                          40100L, 40105L, 40110L, 40115L, 40120L, 40125L, 40130L,\n                          40135L, 40140L, 40145L, 40150L, 41010L, 41015L, 41020L,\n                          41025L, 41030L, 41035L, 41040L, 41045L, 41050L, 41055L,\n                          41060L, 41065L, 41070L, 41075L, 41080L, 41085L, 41090L,\n                          41095L, 41100L, 41105L, 41110L, 41115L, 41120L, 41125L,\n                          41130L, 41135L, 41140L, 41145L, 41150L, 41155L,\n                          41160L),\n   Approximate.length = c(2000L, 500L, 2000L, 500L, 500L, 500L, 1500L, 2000L,\n                          1500L, 500L, 2000L, 500L, 4000L, 500L, 1000L, 500L,\n                          1000L, 2000L, 2500L, 500L, 1000L, 500L, 3500L, 3500L,\n                          500L, 6000L, 500L, 3000L, 1000L, 2000L, 2000L, 1000L,\n                          3000L, 500L, 5500L, 1000L, 3500L, 3500L, 500L, 1000L,\n                          500L, 1000L, 500L, 2000L, 1500L, 500L, 3500L, 500L, 500L,\n                          1500L, 1000L, 500L, 1000L, 2000L, 1000L, 1000L, 500L,\n                          500L, 2000L, 500L, 2000L)\n)"
+  {"data.frame(\n                Route = c(40010L, 40015L, 40020L, 40025L, 40030L, 40035L,\n                          40040L, 40045L, 40050L, 40055L, 40060L, 40065L,\n                          40070L, 40075L, 40080L, 40085L, 40090L, 40092L, 40095L,\n                          40100L, 40105L, 40110L, 40115L, 40120L, 40125L, 40130L,\n                          40135L, 40140L, 40145L, 40150L, 41010L, 41015L, 41020L,\n                          41025L, 41030L, 41035L, 41040L, 41045L, 41050L, 41055L,\n                          41060L, 41065L, 41070L, 41075L, 41080L, 41085L, 41090L,\n                          41095L, 41100L, 41105L, 41110L, 41115L, 41120L, 41125L,\n                          41130L, 41135L, 41140L, 41145L, 41150L, 41155L,\n                          41160L),\n   Approximate.length = c(2000L, 500L, 2000L, 500L, 500L, 500L, 1500L, 2000L,\n                          1500L, 500L, 2000L, 500L, 4000L, 500L, 1000L, 500L,\n                          1000L, 2000L, 2500L, 500L, 1000L, 500L, 3500L, 3500L,\n                          500L, 6000L, 500L, 3000L, 1000L, 2000L, 2000L, 1000L,\n                          3000L, 500L, 5500L, 1000L, 3500L, 3500L, 500L, 1000L,\n                          500L, 1000L, 500L, 2000L, 1500L, 500L, 3500L, 500L, 500L,\n                          1500L, 1000L, 500L, 1000L, 2000L, 1000L, 1000L, 500L,\n                          500L, 2000L, 500L, 2000L)\n)\n"
   })
 })
 
 test_that("A Data.frame can be parsed correctly", {
   skip_if_not(is_clipr_available, skip_msg)
-  skip_if_not(is_rstudio_available)
   skip_on_cran()
+  skip_if_not(is_RStudio_session)
   expect_equal({
     clipr::write_clip(content = readr::read_lines(file = "./route_length.txt"))
     eval(parse(text = df_construct()))
@@ -48,7 +48,7 @@ test_that("A Data.frame can be parsed correctly", {
 test_that("A pasted multi-type data.frame is rendered and parsed correctly", {
   skip_if_not(is_clipr_available, skip_msg)
   skip_on_cran()
-  skip_if_not(is_rstudio_available)
+  skip_if_not(is_RStudio_session)
   expect_equal({
     clipr::write_clip(content = readr::read_lines(file = "./brisbane_weather.txt"))
     eval(parse(text = df_construct()))
@@ -72,7 +72,7 @@ test_that("A pasted multi-type data.frame is rendered and parsed correctly", {
 test_that("stringsAsFactors=FALSE is added correctly", {
   skip_if_not(is_clipr_available, skip_msg)
   skip_on_cran()
-  skip_if_not(is_rstudio_available)
+  skip_if_not(is_RStudio_session)
   expect_equal({
     clipr::write_clip(content = c("char,int", "a,1", "b,3"))
     eval(parse(text = df_construct()))
@@ -85,6 +85,20 @@ test_that("stringsAsFactors=FALSE is added correctly", {
   })
 })
 
-
+test_that("Data frame contruct recognises raw data with no column headings and adds dummy headers", {
+  skip_if_not(is_clipr_available, skip_msg)
+  skip_on_cran()
+  skip_if_not(is_RStudio_session)
+  expect_equal(
+  { data.frame(stringsAsFactors=FALSE,
+          V1 = c(52.4, 53.4, 86, 73, 79, 73),
+          V2 = c(46.9, 52, 86.6, 73.3, 79.5, 73.5),
+          V3 = c(33.7, 51.8, 84, 71, 77.5, 73.6),
+          V4 = c("A", "A", "B", "B", "B", "C"))
+  },
+  { clipr::write_clip(readr::read_lines("./just_data.txt"))
+    eval(parse(text = df_construct()))}
+  )
+})
 
 

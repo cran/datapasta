@@ -7,7 +7,7 @@
 render_type(char_vec, char_type)
 }
 \arguments{
-\item{char_vec}{a chracter vector containing text to be rendered as the type indicated by type_str}
+\item{char_vec}{a character vector containing text to be rendered as the type indicated by type_str}
 
 \item{char_type}{a string describing the type of char_vec}
 }
@@ -19,4 +19,3 @@ character vector. The type attribute contains the type guessed by `readr`.
 Renders a character vector as R types for pasting into Rstudio.
 Strings are quoted. Numbers, NA, logicals etc are not.
 }
-

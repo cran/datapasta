@@ -22,6 +22,7 @@ df_paste <- function(input_table, output_context = guess_output_context()){
 #' @return nothing.
 #'
 df_format <- function(input_table, output_context = clipboard_context()){
+  if(!interactive()) stop("Cannot write to clipboard in non-interactive sessions.")
   output <- df_construct(input_table, oc = output_context)
   clipr::write_clip(output)
 }
@@ -42,7 +43,7 @@ df_construct <- function(input_table, oc = console_context()) {
                             })
 
     if(is.null(input_table)){
-      if(!clipr::clipr_available()) message("Clipboard is not available. Is R running in RStudio Server or a C.I. machine?")
+      if(!clipr::clipr_available()) message(.global_datapasta_env$no_clip_msg)
       else message("Could not paste clipboard as data.frame. Text could not be parsed as table.")
       return(NULL)
     }
@@ -101,17 +102,17 @@ df_construct <- function(input_table, oc = console_context()) {
                   "data.frame(",ifelse(contains_chars, yes = "stringsAsFactors=FALSE,", no=""),"\n"),
            paste0(sapply(list_of_cols[1:(length(list_of_cols) - 1)], function(x) tortellini(x, indent_context = oc$indent_context, add_comma = TRUE)), collapse = ""),
            paste0(sapply(list_of_cols[length(list_of_cols)], function(x) tortellini(x, indent_context = oc$indent_context, add_comma = FALSE))),
-           strrep(" ", oc$indent_context),")"
+           strrep(" ", oc$indent_context),")\n"
     ), collapse = "")
 
 
   return(invisible(output))
 }
 
-#' wrap the datpasta around itself
+#' wrap the datapasta around itself
 #' @param s input string
 #' @param n number of characters for text (includes column name on line 1)
-#' @param indent_context the level of indend in spaces in the current editor pane
+#' @param indent_context the level of indent in spaces in the current editor pane
 #' @param add_comma add one final comma to the end of the wrapped column def? Useful when pasting together columns.
 #' @return w wrapped string
 

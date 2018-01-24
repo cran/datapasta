@@ -2,6 +2,7 @@ globalVariables(c(".rs.readUiPref",".global_datapasta_env"), "datapasta") #ignor
 .global_datapasta_env <- new.env(parent=emptyenv())
 .global_datapasta_env$decimal_mark <- "."
 .global_datapasta_env$max_rows <- 200
+.global_datapasta_env$no_clip_msg <- "Clipboard is not available. Is xsel or xclip installed? Is DISPLAY set?"
 
 #' tribble_paste
 #' @description Parse the current clipboard as a table, or use the table argument supplied, and paste in at the cursor location in tribble format.
@@ -20,12 +21,13 @@ tribble_paste <- function(input_table, output_context = guess_output_context()){
 }
 
 #' tribble_format
-#' @description Parse the current clipboard as a table, or use the table argument supplied, and paste to the clipboard in tribbble format.
+#' @description Parse the current clipboard as a table, or use the table argument supplied, and paste to the clipboard in tribble format.
 #' @param input_table an optional input `data.frame`. If `input_table` is supplied, then nothing is read from the clipboard.
 #' @param output_context an optional output context that defines the target and indentation. Default is console.
 #' Table is output as `tribble()` call. Useful for creating reproducible examples.
 #' @return Nothing.
 tribble_format <- function(input_table, output_context = console_context()){
+  if(!interactive()) stop("Cannot write to clipboard in non-interactive sessions.")
   output <- tribble_construct(input_table, oc = output_context)
   clipr::write_clip(output)
 }
@@ -47,12 +49,12 @@ tribble_construct <- function(input_table, oc = console_context()){
                             })
 
     if(is.null(input_table)){
-      if(!clipr::clipr_available()) message("Clipboard is not available. Is R running in RStudio Server or a C.I. machine?")
+      if(!clipr::clipr_available()) message(.global_datapasta_env$no_clip_msg)
       else message("Could not paste clipboard as tibble. Text could not be parsed as table.")
       return(NULL)
     }
-    #Parse data types from string using readr::parse_guess
-    input_table_types <- lapply(input_table, readr::guess_parser)
+    # Parse data types from string using readr::guess_parser
+    input_table_types <- attr(input_table, "col_types")
   }else{
     if(!is.data.frame(input_table) && !tibble::is_tibble(input_table)){
       message("Could not format input_table as table. Unexpected class.")
@@ -66,8 +68,13 @@ tribble_construct <- function(input_table, oc = console_context()){
     #Store types as characters so the char lengths can be computed
     input_table <- as.data.frame(lapply(input_table, as.character), stringsAsFactors = FALSE)
   }
+  # Warn if there is any factors, they will be converted to strings.
+  factor_cols <- which(input_table_types == "factor")
+  if( length(factor_cols > 0) ){
+    warning("Column(s) ", paste0(factor_cols, collapse = ","), " have been converted from factor to character in tribble output.")
+  }
 
-  #Find the max length of data as string in each column
+  # Find the max length of data as string in each column
   col_widths <- mapply(input_table,
                        FUN =
                          function(df_col, df_col_type){
@@ -82,15 +89,15 @@ tribble_construct <- function(input_table, oc = console_context()){
                        df_col_type = input_table_types
 
   )
-  #Set the column width depending on the max length of data as string or the header, whichever is longer.
+  # Set the column width depending on the max length of data as string or the header, whichever is longer.
   col_widths <- mapply(max,
                        col_widths,
                        nchar(names(input_table))+1) #+1 for "~"
 
-  #Header
+  # Header
   header <- paste0(ifelse(oc$indent_head, yes = strrep(" ", oc$indent_context), no = ""), "tibble::tribble(\n")
 
-  #Column names
+  # Column names
   names_row <- paste0(
                   paste0(strrep(" ",oc$indent_context+oc$nspc),
                       paste0(
@@ -108,7 +115,7 @@ tribble_construct <- function(input_table, oc = console_context()){
                 )
 
 
-  #Write correct data types
+  # Write correct data types
   body_rows <- lapply(X = as.data.frame(t(input_table), stringsAsFactors = FALSE),
                       FUN =
                         function(col){
@@ -135,12 +142,12 @@ tribble_construct <- function(input_table, oc = console_context()){
 
 
 
-  #Need to remove the final comma that will break everything.
+  # Need to remove the final comma that will break everything.
   body_rows <- paste0(as.vector(body_rows),collapse = "")
   body_rows <- gsub(pattern = ",\n$", replacement = "\n", x = body_rows)
 
-  #Footer
-  footer <- paste0(strrep(" ",oc$indent_context+oc$nspc),")")
+  # Footer
+  footer <- paste0(strrep(" ",oc$indent_context+oc$nspc),")\n")
   output <- paste0(header, names_row, body_rows, footer)
 
   return(invisible(output))
@@ -155,13 +162,28 @@ tribble_construct <- function(input_table, oc = console_context()){
 #' @return The number of characters wide this data would be in when rendered in text
 nchar_type <- function(df_col_row, df_col_type){
   n_chars <- nchar(df_col_row)
+
+  if(length(df_col_type) > 1) df_col_type = "complex" # We can't really handle it.
+
   add_chars <- switch(df_col_type,
                       "integer" = 1, #for the "L",
-                      "character" = 2 + length(gregexpr(pattern = "(\"|\')", text = df_col_row)[[1]]), #2 for outer quotes +1 "\" for each quote in string
+                      "character" = 2 + nquote_str(df_col_row), #2 for outer quotes +1 "\" for each quote in string
+                      "factor" = 2 + nquote_str(df_col_row),
+                      "complex" = 2 + nquote_str(df_col_row), #Assume we print as a quoted char
                       0) #0 for other types
   return(n_chars + add_chars)
 
 }
+
+#' Count the number of quotes in a string
+#'
+#' @param char_vec the string to count quotes in
+#'
+#' @return a number, possibly 0.
+nquote_str <- function(char_vec){
+  sum(gregexpr(pattern = "(\"|\')", text = char_vec)[[1]] > 0)
+}
+
 
 #' pad_to
 #' @description Left pad string to a certain size. A helper function for getting spacing in table correct.
@@ -179,7 +201,7 @@ pad_to <-function(char_vec, char_length){
 #' @description Renders a character vector as R types for pasting into Rstudio.
 #' Strings are quoted. Numbers, NA, logicals etc are not.
 #'
-#' @param char_vec a chracter vector containing text to be rendered as the type indicated by type_str
+#' @param char_vec a character vector containing text to be rendered as the type indicated by type_str
 #' @param char_type a string describing the type of char_vec
 #'
 #' @return A vector parsed from the clipboard as ether a character string or a
@@ -187,6 +209,10 @@ pad_to <-function(char_vec, char_length){
 #'
 #'
 render_type <- function(char_vec, char_type){
+
+  if(length(char_type) > 1) char_type <- "complex"
+  # We can't handle special classes. Just fall through defaults.
+
   if(is.na(char_vec)){
     output <- switch(char_type,
                      "integer" = "NA",
@@ -203,8 +229,8 @@ render_type <- function(char_vec, char_type){
                      "number" = readr::parse_number(char_vec, locale = readr::locale(decimal_mark = .global_datapasta_env$decimal_mark)),
                      "numeric" = as.double(char_vec),
                      "logical" = as.logical(char_vec),
-                     "factor" = ifelse(nchar(char_vec)!=0, paste0('"',char_vec,'"'), "NA"),
-                     "character" = ifelse(nchar(char_vec)!=0, paste0('"',escape_chars(char_vec),'"'), "NA"),
+                     "factor" = ifelse(nchar(char_vec)!=0, deparse(char_vec), "NA"),
+                     "character" = ifelse(nchar(char_vec)!=0, deparse(char_vec), "NA"),
                      "list" = char_vec,
                      paste0('"',char_vec,'"')
     )
@@ -232,10 +258,10 @@ render_type_pad_to <- function(char_vec, char_type, char_length){
 #'
 #' @param char_vec a table from the clipboard in character vector form.
 #'
-#' @description Guesses the seprator based on a simple heuristic over the first 10 or less rows:
+#' @description Guesses the separator based on a simple heuristic over the first 10 or less rows:
 #' The separator chosen is the one that leads to the most columns, whilst parsing the same number of columns for each line (var=0).
 #' The guessing algorithm ignores blank lines - which are lines that contain only the separator.
-#' Options are in c(",","\\t","\\|,;")
+#' Options are in `c(",","\\t","\\|",";")`
 #
 #'
 #' @return the separator selected to parse char_vec as a table
@@ -284,7 +310,7 @@ read_clip_tbl_guess <- function (x = clipr::read_clip(), ...)
   .dots <- list(...)
   .dots$file <- textConnection(x)
   if (is.null(.dots$header))
-    .dots$header <- TRUE
+    .dots$header <- FALSE
   if (is.null(.dots$sep)){
     .dots$sep <- guess_sep(x)
   }
@@ -297,8 +323,29 @@ read_clip_tbl_guess <- function (x = clipr::read_clip(), ...)
   if (is.null(.dots$strip.white))
     .dots$strip.white <- TRUE
     .dots$quote <-  ""
-  do.call(utils::read.table, args = .dots)
+  x_table <- do.call(utils::read.table, args = .dots)
+
+  # Determine if row 1 a header
+  types_header <- lapply(x_table[1,], readr::guess_parser)
+  types_body <- lapply(x_table[-1,], readr::guess_parser)
+  if( !identical(types_header, types_body) ){
+    # Row 1 is a header
+    x_table <- first_row_to_header(x_table)
+  } else {
+    if( all(c(types_body, types_header) == "character") ){
+      # Row 1 is again a header
+      x_table <- first_row_to_header(x_table)
+    }
+    else{
+      # Row 1 is data
+      # Nothing to do.
+    }
+  }
+  attr(x_table, "col_types") <- types_body
+  x_table
 }
+
+
 
 #' dp_set_decimal_mark
 #'
@@ -315,7 +362,7 @@ dp_set_decimal_mark <- function(mark){
 
 #' dp_set_max_rows
 #'
-#' @param num_rows The number of rows of an input at which any of tribble_construct() or df_contruct() will abort parsing. Datapasta is untested on large tables. Use at own risk.
+#' @param num_rows The number of rows of an input at which any of tribble_construct() or df_construct() will abort parsing. Datapasta is untested on large tables. Use at own risk.
 #'
 #' @return NULL
 #' @export
@@ -328,7 +375,7 @@ dp_set_max_rows <- function(num_rows){
 #'
 #' @description Return the a list containing the guessed output target context, either rstudio or the console.
 #'
-#' @return a list containint the output target, space size of indent, and number of indents at context.
+#' @return a list containing the output target, space size of indent, and number of indents at context.
 guess_output_context <- function(){
   if(requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()){
     output_context <- rstudio_context()
@@ -383,26 +430,16 @@ markdown_context <- function(){
 
 #' custom_context
 #'
-#' @description the _context fuctions define lists of parameters for text formatting.
+#' @description the _context functions define lists of parameters for text formatting.
 #' The specific contexts return hard-coded values appropriate to the context they describe, while custom_context allows definition of new contexts for custom formatting.
 #' @param output_mode A named output mode, controls the target of the _paste functions options are "rstudioapi" or "console"
 #' @param nspc The number of spaces for each indent level in the output context
 #' @param indent_context The number of spaces applied initially to all lines in the output context
-#' @param indent_head Logical. Apply the indent_context to the to the header row? Use FALSE if targetting cursor location.
-#' @return an output context. An input to _paste, _format, _contruct functions used to formatt whitespace.
+#' @param indent_head Logical. Apply the indent_context to the to the header row? Use FALSE if targeting cursor location.
+#' @return an output context. An input to _paste, _format, _construct functions used to format whitespace.
 #' @export
 #'
 custom_context <- function(output_mode = "console", nspc = 2, indent_context = 0, indent_head = TRUE){
   output_context <- list(output_mode = output_mode, nspc = nspc, indent_context = indent_context, indent_head = indent_head)
   output_context
 }
-
-#' Title
-#'
-#' @param char_vec a character string with characters that may need escaping (eg. `"`)
-#'
-#' @return the original char_vec with an extra "\" inserted before each character that needs escaping.
-escape_chars <- function(char_vec){
-  gsub(pattern = "(\"|\')", replacement = "\\\\\\1", x = char_vec, fixed = FALSE)
-}
-
