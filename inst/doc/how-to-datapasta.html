@@ -1,81 +1,210 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="pandoc" />
+<title>Typical Usage with Rstudio</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
 
-<meta name="author" content="Miles McBain" />
-
-<meta name="date" content="2018-01-25" />
-
-<title>How to Datapasta</title>
-
-
-
-<style type="text/css">code{white-space: pre;}</style>
+<!-- Styles for R syntax highlighter -->
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
 </style>
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
-
 </head>
 
 <body>
-
-
-
-
-<h1 class="title toc-ignore">How to Datapasta</h1>
-<h4 class="author"><em>Miles McBain</em></h4>
-<h4 class="date"><em>2018-01-25</em></h4>
-
-
-
 <p>Datapasta provides RStudio addins and functions that give you complete freedom copy-paste data to and from your source editor, formatted for immediate use. Note: repeated use has been known to cause <strong>titilation</strong> and <strong>giddiness</strong>.</p>
-<p>Places I’ve found this power useful:</p>
+
+<p>Places I&#39;ve found this power useful:</p>
+
 <ul>
 <li>Copying tables from Excel, Jupyter, and websites, where the source file cannot be easily read.</li>
 <li>Embedding small-ish amounts of raw data from .csv into Rmarkdown files. The file thus contains code documentation and data, attaining the holy trinity of reproducibility.</li>
@@ -83,203 +212,245 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Adding datasets to readily reproducible examples for posting to StackOverflow, Slack channels etc.</li>
 <li>Creating <code>c()</code> expressions with a LOT less typing and fiddling.</li>
 </ul>
+
 <p>Typical usage takes full advantage of addins within RStudio, however <code>datapasta</code> can be used with any R editor, even just the terminal. The typical RStudio case is described in full detail below, followed by the fallback behaviour.</p>
-<div id="typical-usage-with-rstudio" class="section level1">
+
 <h1>Typical Usage with Rstudio</h1>
-<div id="pasting-a-table-as-a-formatted-tibble-definition-with-tribble_paste" class="section level2">
+
 <h2>Pasting a table as a formatted tibble definition with <code>tribble_paste()</code></h2>
+
 <p>You can copy this html table of Brisbane weather forecasts:</p>
-<table>
-<thead>
-<tr class="header">
+
+<table><thead>
+<tr>
 <th align="left">X</th>
 <th align="left">Location</th>
 <th align="right">Min</th>
 <th align="right">Max</th>
 </tr>
-</thead>
-<tbody>
-<tr class="odd">
+</thead><tbody>
+<tr>
 <td align="left">Partly cloudy.</td>
 <td align="left">Brisbane</td>
 <td align="right">19</td>
 <td align="right">29</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">Partly cloudy.</td>
 <td align="left">Brisbane Airport</td>
 <td align="right">18</td>
 <td align="right">27</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">Possible shower.</td>
 <td align="left">Beaudesert</td>
 <td align="right">15</td>
 <td align="right">30</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">Partly cloudy.</td>
 <td align="left">Chermside</td>
 <td align="right">17</td>
 <td align="right">29</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">Shower or two. Possible storm.</td>
 <td align="left">Gatton</td>
 <td align="right">15</td>
 <td align="right">32</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">Possible shower.</td>
 <td align="left">Ipswich</td>
 <td align="right">15</td>
 <td align="right">30</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">Partly cloudy.</td>
 <td align="left">Logan Central</td>
 <td align="right">18</td>
 <td align="right">29</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">Mostly sunny.</td>
 <td align="left">Manly</td>
 <td align="right">20</td>
 <td align="right">26</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">Partly cloudy.</td>
 <td align="left">Mount Gravatt</td>
 <td align="right">17</td>
 <td align="right">28</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">Possible shower.</td>
 <td align="left">Oxley</td>
 <td align="right">17</td>
 <td align="right">30</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">Partly cloudy.</td>
 <td align="left">Redcliffe</td>
 <td align="right">19</td>
 <td align="right">27</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
+
 <p>And make this appear at the current cursor:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble<span class="op">::</span><span class="kw">tribble</span>(
-                                  <span class="op">~</span>X,          <span class="op">~</span>Location, <span class="op">~</span>Min, <span class="op">~</span>Max,
-                    <span class="st">&quot;Partly cloudy.&quot;</span>,         <span class="st">&quot;Brisbane&quot;</span>,   19L,   29L,
-                    <span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Brisbane Airport&quot;</span>,   18L,   27L,
-                  <span class="st">&quot;Possible shower.&quot;</span>,       <span class="st">&quot;Beaudesert&quot;</span>,   15L,   30L,
-                    <span class="st">&quot;Partly cloudy.&quot;</span>,        <span class="st">&quot;Chermside&quot;</span>,   17L,   29L,
-    <span class="st">&quot;Shower or two. Possible storm.&quot;</span>,           <span class="st">&quot;Gatton&quot;</span>,   15L,   32L,
-                  <span class="st">&quot;Possible shower.&quot;</span>,          <span class="st">&quot;Ipswich&quot;</span>,   15L,   30L,
-                    <span class="st">&quot;Partly cloudy.&quot;</span>,    <span class="st">&quot;Logan Central&quot;</span>,   18L,   29L,
-                     <span class="st">&quot;Mostly sunny.&quot;</span>,            <span class="st">&quot;Manly&quot;</span>,   20L,   26L,
-                    <span class="st">&quot;Partly cloudy.&quot;</span>,    <span class="st">&quot;Mount Gravatt&quot;</span>,   17L,   28L,
-                  <span class="st">&quot;Possible shower.&quot;</span>,            <span class="st">&quot;Oxley&quot;</span>,   17L,   30L,
-                    <span class="st">&quot;Partly cloudy.&quot;</span>,        <span class="st">&quot;Redcliffe&quot;</span>,   19L,   27L
-    )</code></pre></div>
-<p><code>tibble::tribble()</code> or ‘<strong>transposed</strong> tibble’ is a really neat function that allows a <code>tibble</code> to be written in human readable format (Thanks be to Hadley).</p>
-<p>To paste data as a <code>tribble()</code> call, just copy the table header and data rows, then paste into the source editor using the addin <code>Paste as tribble</code>. For best results, assign the addin to a memorable keyboard shortcut, e.g. <code>ctrl + shift + t</code>. See <a href="https://support.rstudio.com/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts">Customizing Keyboard Shortcuts</a>.</p>
+
+<pre><code class="r">tibble::tribble(
+                                  ~X,          ~Location, ~Min, ~Max,
+                    &quot;Partly cloudy.&quot;,         &quot;Brisbane&quot;,   19L,   29L,
+                    &quot;Partly cloudy.&quot;, &quot;Brisbane Airport&quot;,   18L,   27L,
+                  &quot;Possible shower.&quot;,       &quot;Beaudesert&quot;,   15L,   30L,
+                    &quot;Partly cloudy.&quot;,        &quot;Chermside&quot;,   17L,   29L,
+    &quot;Shower or two. Possible storm.&quot;,           &quot;Gatton&quot;,   15L,   32L,
+                  &quot;Possible shower.&quot;,          &quot;Ipswich&quot;,   15L,   30L,
+                    &quot;Partly cloudy.&quot;,    &quot;Logan Central&quot;,   18L,   29L,
+                     &quot;Mostly sunny.&quot;,            &quot;Manly&quot;,   20L,   26L,
+                    &quot;Partly cloudy.&quot;,    &quot;Mount Gravatt&quot;,   17L,   28L,
+                  &quot;Possible shower.&quot;,            &quot;Oxley&quot;,   17L,   30L,
+                    &quot;Partly cloudy.&quot;,        &quot;Redcliffe&quot;,   19L,   27L
+    )
+</code></pre>
+
+<p><code>tibble::tribble()</code> or &#39;<strong>transposed</strong> tibble&#39; is a really neat function that allows a <code>tibble</code> to be written in human readable format (Thanks be to Hadley).</p>
+
+<p>To paste data as a <code>tribble()</code> call, just copy the table header and data rows, then paste into the source editor using the addin <code>Paste as tribble</code>. For best results, assign the addin to a memorable keyboard shortcut, e.g. <code>ctrl + shift + t</code>. See <a href="https://support.rstudio.com/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts">Customizing Keyboard Shortcuts </a>.</p>
+
 <p><code>tribble_paste()</code> is a flexible function that guesses the separator and types of the data it pulls from the clipboard. Mostly this seems to work well. Occasionally it epic-fails. The supported separators are <code>\|</code> (pipe), <code>\t</code> (tab), <code>,</code> (comma), <code>;</code>(semicolon). Most data copied from the internet or spreadsheets will be tab delimited. It will also attempt to recognise a lack of a header row and create a default for you, although this is not always possible.</p>
-</div>
-<div id="pasting-a-list-as-a-horizontal-vector-with-vector_paste" class="section level2">
+
 <h2>Pasting a list as a horizontal vector with <code>vector_paste()</code></h2>
+
 <p>A list could be a row or column of a spreadsheet or intermediate output. With the <code>Paste as vector</code> addin you can go from something like:</p>
-<pre><code>Mint    Fedora  Debian  Ubuntu  OpenSUSE</code></pre>
+
+<pre><code>Mint    Fedora  Debian  Ubuntu  OpenSUSE
+</code></pre>
+
 <p>or</p>
-<pre><code>Mint, Fedora, Debian, Ubuntu, OpenSUSE</code></pre>
+
+<pre><code>Mint, Fedora, Debian, Ubuntu, OpenSUSE
+</code></pre>
+
 <p>or</p>
+
 <pre><code>Mint
 Fedora
 Debian
 Ubuntu
-OpenSUSE</code></pre>
+OpenSUSE
+</code></pre>
+
 <p>to</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="st">&quot;Mint&quot;</span>, <span class="st">&quot;Fedora&quot;</span>, <span class="st">&quot;Debian&quot;</span>, <span class="st">&quot;Ubuntu&quot;</span>, <span class="st">&quot;OpenSUSE&quot;</span>)</code></pre></div>
+
+<pre><code class="r">c(&quot;Mint&quot;, &quot;Fedora&quot;, &quot;Debian&quot;, &quot;Ubuntu&quot;, &quot;OpenSUSE&quot;)
+</code></pre>
+
 <p>This is pasted into the source editor at the current cursor.</p>
+
 <p>Just like <code>tribble_paste()</code>, <code>vector_paste()</code> has a flexible parser that can guess the type and separator of the data. The supported separators are <code>\|</code> (pipe), <code>\t</code> (tab), <code>,</code> (comma), <code>;</code>(semicolon) and end of line. The recommended keyboard shortcut is <code>crtl + alt + shift + v</code>.</p>
-</div>
-<div id="pasting-a-list-as-a-vertical-vector-with-vector_paste_vertical" class="section level2">
+
 <h2>Pasting a list as a vertical vector with <code>vector_paste_vertical()</code></h2>
+
 <p>Given the same types of list inputs as above, the <code>Paste as vector (vertical)</code> addin pastes the output with each element on its own line, e.g.:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="st">&quot;Mint&quot;</span>,
-  <span class="st">&quot;Fedora&quot;</span>,
-  <span class="st">&quot;Debian&quot;</span>,
-  <span class="st">&quot;Ubuntu&quot;</span>,
-  <span class="st">&quot;OpenSUSE&quot;</span>)</code></pre></div>
+
+<pre><code class="r">c(&quot;Mint&quot;,
+  &quot;Fedora&quot;,
+  &quot;Debian&quot;,
+  &quot;Ubuntu&quot;,
+  &quot;OpenSUSE&quot;)
+</code></pre>
+
 <p>This is much nicer for long lists. I have found this is actually the version I use more often. I recommend using <code>ctrl + shift + v</code> as keyboard shortcut.</p>
-</div>
-<div id="pasting-as-a-data.frame-with-df_paste" class="section level2">
-<h2>Pasting as a data.frame with <code>df_paste()</code></h2>
-<p>The parser here is identical to <code>tribble_paste()</code> and has all the same type and separator guessing goodness. The difference is the output will be a formatted call to <code>base::data.frame()</code>. Some sensible line wrapping rules etc are implemented. Useful for purists and educators alike. Special thanks to Jonathan Carroll for contributing this feature.</p>
+
+<p>##Pasting as a data.frame with <code>df_paste()</code>
+The parser here is identical to <code>tribble_paste()</code> and has all the same type and separator guessing goodness. The difference is the output will be a formatted call to <code>base::data.frame()</code>. Some sensible line wrapping rules etc are implemented. Useful for purists and educators alike. Special thanks to Jonathan Carroll for contributing this feature.</p>
+
 <p>So the Brisbane weather table from above becomes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(
-           <span class="dt">X =</span> <span class="kw">c</span>(<span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Possible shower.&quot;</span>,
-                 <span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Shower or two. Possible storm.&quot;</span>,
-                 <span class="st">&quot;Possible shower.&quot;</span>, <span class="st">&quot;Partly cloudy.&quot;</span>, <span class="st">&quot;Mostly sunny.&quot;</span>, <span class="st">&quot;Partly cloudy.&quot;</span>,
-                 <span class="st">&quot;Possible shower.&quot;</span>, <span class="st">&quot;Partly cloudy.&quot;</span>),
-    <span class="dt">Location =</span> <span class="kw">c</span>(<span class="st">&quot;Brisbane&quot;</span>, <span class="st">&quot;Brisbane Airport&quot;</span>, <span class="st">&quot;Beaudesert&quot;</span>, <span class="st">&quot;Chermside&quot;</span>,
-                 <span class="st">&quot;Gatton&quot;</span>, <span class="st">&quot;Ipswich&quot;</span>, <span class="st">&quot;Logan Central&quot;</span>, <span class="st">&quot;Manly&quot;</span>,
-                 <span class="st">&quot;Mount Gravatt&quot;</span>, <span class="st">&quot;Oxley&quot;</span>, <span class="st">&quot;Redcliffe&quot;</span>),
-         <span class="dt">Min =</span> <span class="kw">c</span>(<span class="dv">19</span>, <span class="dv">18</span>, <span class="dv">15</span>, <span class="dv">17</span>, <span class="dv">15</span>, <span class="dv">15</span>, <span class="dv">18</span>, <span class="dv">20</span>, <span class="dv">17</span>, <span class="dv">17</span>, <span class="dv">19</span>),
-         <span class="dt">Max =</span> <span class="kw">c</span>(<span class="dv">29</span>, <span class="dv">27</span>, <span class="dv">30</span>, <span class="dv">29</span>, <span class="dv">32</span>, <span class="dv">30</span>, <span class="dv">29</span>, <span class="dv">26</span>, <span class="dv">28</span>, <span class="dv">30</span>, <span class="dv">27</span>)
-)</code></pre></div>
+
+<pre><code class="r">data.frame(
+           X = c(&quot;Partly cloudy.&quot;, &quot;Partly cloudy.&quot;, &quot;Possible shower.&quot;,
+                 &quot;Partly cloudy.&quot;, &quot;Shower or two. Possible storm.&quot;,
+                 &quot;Possible shower.&quot;, &quot;Partly cloudy.&quot;, &quot;Mostly sunny.&quot;, &quot;Partly cloudy.&quot;,
+                 &quot;Possible shower.&quot;, &quot;Partly cloudy.&quot;),
+    Location = c(&quot;Brisbane&quot;, &quot;Brisbane Airport&quot;, &quot;Beaudesert&quot;, &quot;Chermside&quot;,
+                 &quot;Gatton&quot;, &quot;Ipswich&quot;, &quot;Logan Central&quot;, &quot;Manly&quot;,
+                 &quot;Mount Gravatt&quot;, &quot;Oxley&quot;, &quot;Redcliffe&quot;),
+         Min = c(19, 18, 15, 17, 15, 15, 18, 20, 17, 17, 19),
+         Max = c(29, 27, 30, 29, 32, 30, 29, 26, 28, 30, 27)
+)
+</code></pre>
+
 <p>For a shortcut you could try <code>ctrl + shift + d</code>.</p>
-</div>
-<div id="outputting-data-from-your-r-evironment" class="section level2">
-<h2>Outputting data from your R evironment</h2>
-<div id="output-to-r-with-dpasta" class="section level3">
+
+<h2>Outputting data from your R environment</h2>
+
 <h3>Output to R with <code>dpasta()</code></h3>
+
 <p>All of the above addin functions can be called directly with an R object argument. When run, this will result in the object being output at the current cursor. Usually the next line. To make things more magical, a there is a single function <code>dpasta</code> that will match the argument with the appropriate <code>_paste()</code> function based on its class. This means:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">head</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">dpasta</span>()</code></pre></div>
-<p>results in:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(
-      <span class="dt">Sepal.Length =</span> <span class="kw">c</span>(<span class="fl">5.1</span>, <span class="fl">4.9</span>, <span class="fl">4.7</span>, <span class="fl">4.6</span>, <span class="dv">5</span>, <span class="fl">5.4</span>),
-       <span class="dt">Sepal.Width =</span> <span class="kw">c</span>(<span class="fl">3.5</span>, <span class="dv">3</span>, <span class="fl">3.2</span>, <span class="fl">3.1</span>, <span class="fl">3.6</span>, <span class="fl">3.9</span>),
-      <span class="dt">Petal.Length =</span> <span class="kw">c</span>(<span class="fl">1.4</span>, <span class="fl">1.4</span>, <span class="fl">1.3</span>, <span class="fl">1.5</span>, <span class="fl">1.4</span>, <span class="fl">1.7</span>),
-       <span class="dt">Petal.Width =</span> <span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>),
-           <span class="dt">Species =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;setosa&quot;</span>,
-                                 <span class="st">&quot;setosa&quot;</span>))
-   )</code></pre></div>
+
+<pre><code class="r">iris %&gt;%
+  head() %&gt;%
+  dpasta()
+</code></pre>
+
+<p>results in: </p>
+
+<pre><code class="r">data.frame(
+      Sepal.Length = c(5.1, 4.9, 4.7, 4.6, 5, 5.4),
+       Sepal.Width = c(3.5, 3, 3.2, 3.1, 3.6, 3.9),
+      Petal.Length = c(1.4, 1.4, 1.3, 1.5, 1.4, 1.7),
+       Petal.Width = c(0.2, 0.2, 0.2, 0.2, 0.2, 0.4),
+           Species = as.factor(c(&quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;,
+                                 &quot;setosa&quot;))
+   )
+</code></pre>
+
 <p>while:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>class) <span class="op">%&gt;%</span><span class="st">  </span><span class="co">#just to fit neatly on this page</span>
-<span class="st">  </span><span class="kw">head</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">dpasta</span>()</code></pre></div>
+
+<pre><code class="r">mpg %&gt;%
+  select(-class) %&gt;%  #just to fit neatly on this page
+  head() %&gt;%
+  dpasta()
+</code></pre>
+
 <p>will give you:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble<span class="op">::</span><span class="kw">tribble</span>(
-     <span class="op">~</span>manufacturer, <span class="op">~</span>model, <span class="op">~</span>displ, <span class="op">~</span>year, <span class="op">~</span>cyl,        <span class="op">~</span>trans, <span class="op">~</span>drv, <span class="op">~</span>cty, <span class="op">~</span>hwy,  <span class="op">~</span>fl,
-            <span class="st">&quot;audi&quot;</span>,   <span class="st">&quot;a4&quot;</span>,    <span class="fl">1.8</span>, 1999L,   4L,    <span class="st">&quot;auto(l5)&quot;</span>,  <span class="st">&quot;f&quot;</span>,  18L,  29L,  <span class="st">&quot;p&quot;</span>, 
-            <span class="st">&quot;audi&quot;</span>,   <span class="st">&quot;a4&quot;</span>,    <span class="fl">1.8</span>, 1999L,   4L,  <span class="st">&quot;manual(m5)&quot;</span>,  <span class="st">&quot;f&quot;</span>,  21L,  29L,  <span class="st">&quot;p&quot;</span>,
-            <span class="st">&quot;audi&quot;</span>,   <span class="st">&quot;a4&quot;</span>,      <span class="dv">2</span>, 2008L,   4L,  <span class="st">&quot;manual(m6)&quot;</span>,  <span class="st">&quot;f&quot;</span>,  20L,  31L,  <span class="st">&quot;p&quot;</span>,
-            <span class="st">&quot;audi&quot;</span>,   <span class="st">&quot;a4&quot;</span>,      <span class="dv">2</span>, 2008L,   4L,    <span class="st">&quot;auto(av)&quot;</span>,  <span class="st">&quot;f&quot;</span>,  21L,  30L,  <span class="st">&quot;p&quot;</span>,
-            <span class="st">&quot;audi&quot;</span>,   <span class="st">&quot;a4&quot;</span>,    <span class="fl">2.8</span>, 1999L,   6L,    <span class="st">&quot;auto(l5)&quot;</span>,  <span class="st">&quot;f&quot;</span>,  16L,  26L,  <span class="st">&quot;p&quot;</span>,
-            <span class="st">&quot;audi&quot;</span>,   <span class="st">&quot;a4&quot;</span>,    <span class="fl">2.8</span>, 1999L,   6L,  <span class="st">&quot;manual(m5)&quot;</span>,  <span class="st">&quot;f&quot;</span>,  18L,  26L,  <span class="st">&quot;p&quot;</span>
-     )</code></pre></div>
-</div>
-</div>
-<div id="avoiding-fiddly-data-formatting" class="section level2">
+
+<pre><code class="r">tibble::tribble(
+     ~manufacturer, ~model, ~displ, ~year, ~cyl,        ~trans, ~drv, ~cty, ~hwy,  ~fl,
+            &quot;audi&quot;,   &quot;a4&quot;,    1.8, 1999L,   4L,    &quot;auto(l5)&quot;,  &quot;f&quot;,  18L,  29L,  &quot;p&quot;, 
+            &quot;audi&quot;,   &quot;a4&quot;,    1.8, 1999L,   4L,  &quot;manual(m5)&quot;,  &quot;f&quot;,  21L,  29L,  &quot;p&quot;,
+            &quot;audi&quot;,   &quot;a4&quot;,      2, 2008L,   4L,  &quot;manual(m6)&quot;,  &quot;f&quot;,  20L,  31L,  &quot;p&quot;,
+            &quot;audi&quot;,   &quot;a4&quot;,      2, 2008L,   4L,    &quot;auto(av)&quot;,  &quot;f&quot;,  21L,  30L,  &quot;p&quot;,
+            &quot;audi&quot;,   &quot;a4&quot;,    2.8, 1999L,   6L,    &quot;auto(l5)&quot;,  &quot;f&quot;,  16L,  26L,  &quot;p&quot;,
+            &quot;audi&quot;,   &quot;a4&quot;,    2.8, 1999L,   6L,  &quot;manual(m5)&quot;,  &quot;f&quot;,  18L,  26L,  &quot;p&quot;
+     )
+</code></pre>
+
 <h2>Avoiding fiddly data formatting</h2>
+
 <p>There are two addins that operate on RStudio cursor selections to make your life easier:</p>
-<div id="fiddle-selections-unitl-theyre-better" class="section level3">
-<h3>Fiddle Selections unitl they’re better</h3>
+
+<h3>Fiddle Selections until they&#39;re better</h3>
+
 <p><code>Fiddle Selection</code> is intended to remove some fiddly tasks from your workflow. It can turn raw data like <code>1 2 3</code> into <code>c(1,2,3)</code>, then pivot from that to:</p>
+
 <pre><code>c(1,
   2,
-  3)</code></pre>
+  3)
+</code></pre>
+
 <p>and back again to <code>c(1,2,3)</code>. The parser here is really flexible too. It will accept data delimited by any combination of spaces, commas, and newlines.</p>
+
 <p><code>Fiddle Selection</code> Can also reflow messy <code>tribble()</code> and <code>data.frame()</code> expressions into neatly aligned ones, say after hand editing.</p>
-</div>
-<div id="toggle-quotes" class="section level3">
+
 <h3>Toggle Quotes</h3>
-<p><code>Toggle Vector Quotes</code> will convert a selected expression like <code>c(a,b,c)</code> to a quoted version i.e <code>c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;)</code>. If it’s already quoted it will convert the other way to a bare version. All elements will be quoted if there’s a mixture. It also works with vertically algined expressions.</p>
-<p>With the combination of these two you can get really lazy e.g. go from:</p>
+
+<p><code>Toggle Vector Quotes</code> will convert a selected expression like <code>c(a,b,c)</code> to a quoted version i.e <code>c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;)</code>. If it&#39;s already quoted it will convert the other way to a bare version. All elements will be quoted if there&#39;s a mixture. It also works with vertically aligned expressions.</p>
+
+<p>With the combination of these two you can get really lazy e.g. go from: </p>
+
 <pre><code>some stuff I typed
 
 #To
@@ -288,19 +459,26 @@ c(&quot;some&quot;,
   &quot;stuff&quot;,
   &quot;I&quot;,
   &quot;typed&quot;) # mostly
+
 </code></pre>
+
 <p>in a couple of keystrokes!</p>
+
 <p>Try assigning these addins to <code>ctrl + shift + f</code> and <code>ctrl + shift + q</code> respectively.</p>
-</div>
-</div>
-<div id="output-to-clipboard-with-dmdclip" class="section level2">
+
 <h2>Output to clipboard with <code>dmdclip()</code></h2>
+
 <p><code>dmdclip()</code> can help you take the data to somewhere that uses markdown format, for example a Stack Overflow question or Github issue. This function will copy the resulting formatted data object call to the clipboard, inserting 4 spaces at the head of each line, which is markdown syntax for a pre-formatted block.</p>
+
 <p>So:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">head</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">dmdclip</span>()</code></pre></div>
+
+<pre><code class="r">iris %&gt;%
+  head() %&gt;%
+  dmdclip()
+</code></pre>
+
 <p>Will paste the following on the clipboard:</p>
+
 <pre><code>    data.frame(
        Sepal.Length = c(5.1, 4.9, 4.7, 4.6, 5, 5.4),
         Sepal.Width = c(3.5, 3, 3.2, 3.1, 3.6, 3.9),
@@ -308,48 +486,43 @@ c(&quot;some&quot;,
         Petal.Width = c(0.2, 0.2, 0.2, 0.2, 0.2, 0.4),
             Species = as.factor(c(&quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;,
                                   &quot;setosa&quot;))
-    )</code></pre>
-</div>
-</div>
-<div id="usage-without-rstudio" class="section level1">
+    )
+</code></pre>
+
 <h1>Usage without RStudio</h1>
+
 <p>The <code>rstudioapi</code> package enables the calling of addins and output to the cursor. If the API is not detected, all the <code>_paste()</code> functions, and <code>dpasta</code> will output their text to the console, ready for copying and pasting to an editor window.</p>
-<p>In this scenario you may wish to avoid installation of the <code>rstudioapi</code> package dependency. Use <code>install.packages(&quot;datapsata&quot;, dependencies = &quot;Depends&quot;)</code> to avoid API installation, but be sure to follow up with <code>install.packages(c(&quot;readr&quot;,&quot;clipr&quot;))</code>.</p>
-<p><em>note:</em> The <code>dpasta()</code> function can be used without <code>clipr</code> installed, but you’re missing out on a fair amount of awesomeness if you limit yourself to that.</p>
-<div id="custom-behaviour-for-your-unique-slowflake-setup" class="section level2">
-<h2>Custom Behaviour for Your Unique Slowflake Setup</h2>
+
+<p>In this scenario you may wish to avoid installation of the <code>rstudioapi</code> package dependency. Use <code>install.packages(&quot;datapasta&quot;, dependencies = &quot;Depends&quot;)</code> to avoid API installation, but be sure to follow up with <code>install.packages(c(&quot;readr&quot;,&quot;clipr&quot;))</code>. </p>
+
+<p><em>note:</em> The <code>dpasta()</code> function can be used without <code>clipr</code> installed, but you&#39;re missing out on a fair amount of awesomeness if you limit yourself to that.</p>
+
+<h2>Custom Behaviour for Your Unique Snowflake Setup</h2>
+
 <p>Custom behaviour can be created by taking advantage of the <code>_construct()</code> variants of the <code>_paste()</code> functions, as these return their output as an R object which can then be written to an appropriate buffer or clipboard.</p>
+
 <p>for example, if you copied the Brisbane weather forecast from above to the clipboard and then called:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trib_call &lt;-<span class="st"> </span><span class="kw">tribble_construct</span>()</code></pre></div>
+
+<pre><code class="r">trib_call &lt;- tribble_construct()
+</code></pre>
+
 <p><code>trib_call</code> now contains a the tribble call as a character vector. You could then write this with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">write</span>(trib_call, <span class="dt">file =</span> ..your desired location..)
-<span class="co">#OR</span>
-clipr<span class="op">::</span><span class="kw">write_clip</span>(trib_call) <span class="co">#Send it back to the clipboard.</span></code></pre></div>
-</div>
-</div>
-<div id="configurable-options" class="section level1">
+
+<pre><code class="r">write(trib_call, file = ..your desired location..)
+#OR
+clipr::write_clip(trib_call) #Send it back to the clipboard.
+</code></pre>
+
 <h1>Configurable Options</h1>
-<div id="upping-the-row-guard" class="section level2">
+
 <h2>Upping the row guard</h2>
+
 <p>For your protection, <code>datapasta</code> will initially refuse to output R objects of 200 or more rows. Up the row limit for your specific scenario with <code>dp_set_max_rows(n)</code>. Large numbers of rows could take a long time to format. In extreme cases you could crash your R/RStudio session.</p>
-</div>
-<div id="deailing-with-decimal-marks" class="section level2">
-<h2>Deailing with “,” decimal marks</h2>
+
+<h2>Dealing with &ldquo;,&rdquo; decimal marks</h2>
+
 <p>Use <code>dp_set_decimal_mark(&quot;,&quot;)</code> to handle numbers like <code>3,14</code>.</p>
-</div>
-</div>
-
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
 </body>
+
 </html>
